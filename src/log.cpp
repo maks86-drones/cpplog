@@ -56,7 +56,7 @@ Logger::Message& Logger::Message::operator << (double d)
 }
 
 
-Logger::Logger(std::ostream& ostream) : ostream_{ostream}
+Logger::Logger(std::ostream& ostream, Severity min_visible_severity) : ostream_{ostream}, min_visible_severity_{min_visible_severity}
 {
 
 }
@@ -73,6 +73,10 @@ Logger::Message Logger::message(Severity severity)
 
 void Logger::print(Severity severity, std::string msg)
 {
+    if (static_cast<int>(severity) < static_cast<int>(min_visible_severity_)) {
+        return;
+    }
+
     ostream_ << severityToStr(severity) << " " << msg << std::endl;
     if (severity == Severity::FATAL)
     {

@@ -44,17 +44,19 @@ public:
         std::stringstream msg_;
     };
 
-    Logger(std::ostream& stream);
+    Logger(std::ostream& stream, Severity min_visible_severity = Severity::WARN);
     ~Logger();
 
     Message message(Severity severity);
     void print(Severity severity, std::string msg);
+
+    void setMinVisibleSeverity(Severity min_visible_severity) { min_visible_severity_ = min_visible_severity; }
 private:
     std::ostream& ostream_;
+    Severity min_visible_severity_;
 };
 
 Logger& getDefaultLogger();
-
 }
 
 #define LOG_INFO logistreamer::getDefaultLogger().message(logistreamer::Severity::INFO)
